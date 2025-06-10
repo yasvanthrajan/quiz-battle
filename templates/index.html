@@ -1,96 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Quiz Battle 🎮</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Battle 🔥</title>
+  <!-- External stylesheet -->
+  <link rel="stylesheet" href="/static/style.css" />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <div class="container">
-    <h1 class="title">🎯 Quiz Battle</h1>
-    <div id="quiz-card">
-      <p id="question">Loading...</p>
-      <ul id="options"></ul>
-      <p id="result"></p>
-      <button onclick="loadQuestion()" class="next-btn">Next Question</button>
-    </div>
-    <div id="timer">🕒 10s</div>
+  <!-- Animated background elements -->
+  <div class="bg-animation">
+    <div class="floating-shapes"></div>
+    <div class="floating-shapes"></div>
+    <div class="floating-shapes"></div>
+    <div class="floating-shapes"></div>
   </div>
 
-  <audio id="correct-sound" src="/static/correct.mp3"></audio>
-  <audio id="wrong-sound" src="/static/wrong.mp3"></audio>
+  <!-- Particle container -->
+  <div class="particles" id="particles"></div>
 
-  <script>
-    let correctAnswer = "";
-    let timerInterval;
-    let timeLeft = 10;
+  <div class="container">
+    <!-- Top bar with logo + dark-mode switch -->
+    <div class="top-bar">
+      <h1 class="logo">🎮 Quiz Battle</h1>
+      <div class="theme-switch" id="themeToggle">
+        <div class="switch-handle"></div>
+      </div>
+    </div>
 
-    async function loadQuestion() {
-      clearInterval(timerInterval);
-      timeLeft = 10;
-      document.getElementById("timer").innerText = "🕒 10s";
-      startTimer();
+    <!-- Player setup -->
+    <div id="player-section" class="card">
+      <div class="text-center">
+        <h2 class="heading">Ready to Battle? 🚀</h2>
+        <div class="input-group">
+          <input
+            type="text"
+            id="player-name"
+            class="input-field"
+            placeholder="Enter your warrior name..."
+          />
+        </div>
+        <button class="btn btn-primary" onclick="startGame()">⚡ Start Epic Battle</button>
+      </div>
+    </div>
 
-      const res = await fetch("https://opentdb.com/api.php?amount=1&type=multiple");
-      const data = await res.json();
-      const q = data.results[0];
-      correctAnswer = q.correct_answer;
+    <!-- Quiz card -->
+    <div id="quiz-card" class="card hidden">
+      <div class="question-container">
+        <div class="question-text" id="question">
+          <div class="loading"></div> Loading epic question...
+        </div>
+      </div>
 
-      const allOptions = [...q.incorrect_answers, q.correct_answer];
-      shuffle(allOptions);
+      <div class="options-container" id="options"></div>
 
-      document.getElementById("question").innerHTML = decode(q.question);
-      const optionsList = document.getElementById("options");
-      optionsList.innerHTML = "";
+      <div class="result-message hidden" id="result"></div>
 
-      allOptions.forEach(opt => {
-        const li = document.createElement("li");
-        li.innerHTML = decode(opt);
-        li.classList.add("option");
-        li.onclick = () => checkAnswer(opt);
-        optionsList.appendChild(li);
-      });
+      <div class="timer-container">
+        <div class="timer" id="timer">🕒 10s</div>
+      </div>
 
-      document.getElementById("result").innerText = "";
-    }
+      <div class="score-container">
+        <div class="score" id="score">Score: 0</div>
+      </div>
 
-    function checkAnswer(selected) {
-      clearInterval(timerInterval);
-      if (selected === correctAnswer) {
-        document.getElementById("result").innerText = "✅ Correct!";
-        document.getElementById("correct-sound").play();
-      } else {
-        document.getElementById("result").innerText = "❌ Wrong!";
-        document.getElementById("wrong-sound").play();
-      }
-    }
+      <div class="text-center mt-20">
+        <button class="btn btn-success" onclick="loadQuestion()">Next Challenge 🚀</button>
+        <button class="btn btn-danger" onclick="quitQuiz()">Surrender 🏳️</button>
+      </div>
+    </div>
 
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
+    <!-- Final-score screen -->
+    <div id="final-score" class="card hidden">
+      <div class="final-score-card">
+        <h2>🎉 Battle Complete!</h2>
+        <p class="final-score-text" id="summary"></p>
+        <button class="btn btn-primary" onclick="restart()">🔄 Another Battle?</button>
+      </div>
+    </div>
+  </div>
 
-    function decode(str) {
-      const txt = document.createElement("textarea");
-      txt.innerHTML = str;
-      return txt.value;
-    }
-
-    function startTimer() {
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        document.getElementById("timer").innerText = `🕒 ${timeLeft}s`;
-        if (timeLeft === 0) {
-          clearInterval(timerInterval);
-          document.getElementById("result").innerText = "⏰ Time's up!";
-          document.getElementById("wrong-sound").play();
-        }
-      }, 1000);
-    }
-
-    loadQuestion();
-  </script>
+  <!-- Main script -->
+  <script src="/static/main.js"></script>
 </body>
 </html>

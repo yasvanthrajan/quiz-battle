@@ -1,112 +1,140 @@
-body {
-  background: linear-gradient(to right, #e3ffe7, #d9e7ff);
-  font-family: 'Segoe UI', sans-serif;
-  text-align: center;
-  margin: 0;
-  padding: 0;
+/* -------------------  GLOBAL RESET  ------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+/* --------  CSS VARIABLES  -------- */
+:root{
+  --primary-gradient:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+  --secondary-gradient:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);
+  --success-gradient:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);
+  --error-gradient:linear-gradient(135deg,#fa709a 0%,#fee140 100%);
+  --dark-bg:linear-gradient(135deg,#0c0c0c 0%,#1a1a1a 100%);
+  --card-bg:rgba(255,255,255,0.95);
+  --card-bg-dark:rgba(30,30,30,0.95);
+  --text-primary:#2d3748;
+  --text-secondary:#718096;
+  --radius:20px;
+  --shadow-light:0 20px 40px rgba(0,0,0,0.1);
+  --shadow-dark:0 20px 40px rgba(0,0,0,0.3)
 }
 
-.container {
-  padding: 40px;
+/* --------  BODY  -------- */
+body{
+  font-family:'Poppins',sans-serif;
+  background:var(--primary-gradient);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--text-primary);
+  overflow-x:hidden;
+  transition:background .5s
+}
+body.dark{background:var(--dark-bg);color:#e2e8f0}
+
+/* --------  FLOATING BACKGROUND SHAPES  -------- */
+.bg-animation{position:fixed;inset:0;z-index:-1;overflow:hidden}
+.floating-shapes{position:absolute;width:100px;height:100px;background:rgba(255,255,255,.1);border-radius:50%;animation:float 6s ease-in-out infinite}
+.floating-shapes:nth-child(1){top:10%;left:10%}
+.floating-shapes:nth-child(2){top:20%;right:10%;animation-delay:2s}
+.floating-shapes:nth-child(3){bottom:10%;left:20%;animation-delay:4s}
+.floating-shapes:nth-child(4){bottom:20%;right:20%;animation-delay:1s}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-20px) rotate(10deg)}}
+
+/* --------  LAYOUT  -------- */
+.container{width:100%;max-width:800px;padding:20px;position:relative;z-index:1}
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;padding:0 20px}
+.logo{font-size:3rem;font-weight:700;background:linear-gradient(45deg,#667eea,#764ba2);-webkit-background-clip:text;color:transparent;text-shadow:0 4px 8px rgba(0,0,0,.1);animation:logoGlow 2s ease-in-out infinite alternate}
+@keyframes logoGlow{from{filter:drop-shadow(0 0 5px rgba(102,126,234,.3))}to{filter:drop-shadow(0 0 20px rgba(102,126,234,.6))}}
+
+/* --------  DARK/LIGHT SWITCH  -------- */
+.theme-switch{position:relative;width:70px;height:35px;border-radius:25px;background:linear-gradient(45deg,#ffa726,#ffcc02);cursor:pointer;transition:.3s;box-shadow:0 5px 15px rgba(0,0,0,.2)}
+.theme-switch.dark{background:linear-gradient(45deg,#1a1a2e,#16213e)}
+.theme-switch::before{content:'☀️';position:absolute;top:50%;left:8px;transform:translateY(-50%);font-size:20px;transition:.3s}
+.theme-switch.dark::before{content:'🌙';left:42px}
+.switch-handle{position:absolute;top:3px;left:3px;width:29px;height:29px;background:white;border-radius:50%;transition:.4s;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.theme-switch.dark .switch-handle{transform:translateX(35px);background:#1a1a2e}
+
+/* --------  CARD  -------- */
+.card{background:var(--card-bg);backdrop-filter:blur(20px);border-radius:var(--radius);box-shadow:var(--shadow-light);padding:40px;margin:20px 0;border:1px solid rgba(255,255,255,.2);transition:.3s;position:relative}
+.card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:var(--secondary-gradient)}
+.card:hover{transform:translateY(-5px);box-shadow:0 25px 50px rgba(0,0,0,.15)}
+.dark .card{background:var(--card-bg-dark);box-shadow:var(--shadow-dark);border:1px solid rgba(255,255,255,.1)}
+
+/* --------  INPUT FIELD  -------- */
+.input-field{width:100%;padding:15px 20px;font-size:1.1rem;border:2px solid transparent;border-radius:15px;background:rgba(255,255,255,.8);transition:.3s;outline:none}
+.input-field::placeholder{color:var(--text-secondary)}
+.input-field:focus{border-color:#667eea;transform:scale(1.02);box-shadow:0 0 20px rgba(102,126,234,.3)}
+.dark .input-field{background:rgba(50,50,50,.8);color:#e2e8f0}
+
+/* --------  BUTTONS  -------- */
+.btn{padding:15px 30px;font-size:1.1rem;font-weight:600;border:none;border-radius:15px;cursor:pointer;transition:.3s;margin:10px;min-width:120px;position:relative;overflow:hidden}
+.btn-primary{background:var(--primary-gradient);color:#fff;box-shadow:0 10px 25px rgba(102,126,234,.3)}
+.btn-success{background:var(--success-gradient);color:#fff;box-shadow:0 10px 25px rgba(79,172,254,.3)}
+.btn-danger{background:var(--error-gradient);color:#fff;box-shadow:0 10px 25px rgba(250,112,154,.3)}
+.btn:hover{transform:translateY(-3px);box-shadow:0 15px 35px rgba(0,0,0,.2)}
+.btn:active{transform:translateY(-1px)}
+.btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transition:left .5s}
+.btn:hover::before{left:100%}
+
+/* --------  QUESTION + OPTIONS  -------- */
+.question-container{margin:30px 0;padding:25px;background:rgba(102,126,234,.1);border-left:5px solid #667eea;border-radius:15px}
+.question-text{font-size:1.3rem;font-weight:600;line-height:1.6;margin-bottom:20px;color:var(--text-primary)}
+.dark .question-text{color:#e2e8f0}
+
+.options-container{display:grid;gap:15px;margin:30px 0}
+.option{padding:18px 25px;background:rgba(255,255,255,.9);border:2px solid transparent;border-radius:15px;cursor:pointer;transition:.3s;font-size:1.1rem;font-weight:500}
+.option:hover{transform:translateX(10px) scale(1.02);border-color:#667eea;box-shadow:0 10px 25px rgba(102,126,234,.2);background:rgba(102,126,234,.1)}
+.dark .option{background:rgba(50,50,50,.9);color:#e2e8f0}
+.option.correct{background:var(--success-gradient);color:#fff;animation:correctPulse .6s}
+.option.incorrect{background:var(--error-gradient);color:#fff;animation:incorrectShake .6s}
+@keyframes correctPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes incorrectShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+
+/* --------  TIMER + SCORE  -------- */
+.timer-container{display:flex;justify-content:center;align-items:center;margin:20px 0}
+.timer{font-size:1.5rem;font-weight:700;padding:15px 25px;background:var(--secondary-gradient);color:#fff;border-radius:25px;box-shadow:0 10px 25px rgba(240,147,251,.3);animation:timerPulse 1s infinite;min-width:120px;text-align:center}
+.timer.danger{background:var(--error-gradient);animation:timerUrgent .5s infinite}
+@keyframes timerPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+@keyframes timerUrgent{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.1) rotate(2deg)}}
+
+.score{font-size:1.8rem;font-weight:700;background:var(--primary-gradient);-webkit-background-clip:text;color:transparent}
+.result-message{font-size:1.3rem;font-weight:600;margin:20px 0;padding:15px;border-radius:10px;animation:resultFadeIn .5s}
+.result-message.success{background:rgba(79,172,254,.1);color:#0ea5e9;border:2px solid rgba(79,172,254,.3)}
+.result-message.error{background:rgba(250,112,154,.1);color:#ec4899;border:2px solid rgba(250,112,154,.3)}
+@keyframes resultFadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* --------  FINAL SCORE  -------- */
+.final-score-card{text-align:center;padding:50px 40px}
+.final-score-card h2{font-size:3rem;margin-bottom:20px;background:var(--secondary-gradient);-webkit-background-clip:text;color:transparent}
+.final-score-text{font-size:1.5rem;margin-bottom:30px;color:var(--text-secondary)}
+
+/* --------  UTILITY  -------- */
+.hidden{display:none !important}
+.text-center{text-align:center}
+.heading{font-size:2rem;margin-bottom:30px;color:var(--text-primary)}
+.dark .heading{color:#e2e8f0}
+.mt-20{margin-top:20px}
+
+/* --------  LOADING SPINNER  -------- */
+.loading{display:inline-block;width:40px;height:40px;border:4px solid rgba(102,126,234,.3);border-radius:50%;border-top-color:#667eea;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* --------  PARTICLES  -------- */
+.particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.particle{position:absolute;width:4px;height:4px;border-radius:50%;background:rgba(102,126,234,.6);animation:particleFloat 3s linear infinite}
+@keyframes particleFloat{
+  0%{transform:translateY(100vh) rotate(0);opacity:0}
+  10%{opacity:1}
+  90%{opacity:1}
+  100%{transform:translateY(-100vh) rotate(360deg);opacity:0}
 }
 
-.title {
-  font-size: 3em;
-  color: #333;
-  animation: pop-in 1s ease-out;
-}
-
-#quiz-card {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  max-width: 600px;
-  margin: 20px auto;
-  animation: fade-in 1s ease-in-out;
-}
-
-#question {
-  font-size: 1.5em;
-  margin-bottom: 20px;
-}
-
-#options {
-  list-style: none;
-  padding: 0;
-}
-
-.option {
-  background: #f0f0f0;
-  margin: 10px;
-  padding: 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.option:hover {
-  background: #c0e0ff;
-  transform: scale(1.05);
-}
-
-#result {
-  margin-top: 20px;
-  font-size: 1.3em;
-}
-
-.next-btn {
-  background: #4e54c8;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  margin-top: 20px;
-  font-size: 1em;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.next-btn:hover {
-  background: #8f94fb;
-}
-
-#timer {
-  font-size: 1.2em;
-  margin-top: 20px;
-  animation: pulse 1s infinite;
-}
-
-@keyframes pop-in {
-  from {
-    transform: scale(0.5);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse {
-  0% {
-    color: #4e54c8;
-  }
-  50% {
-    color: #8f94fb;
-  }
-  100% {
-    color: #4e54c8;
-  }
+/* --------  RESPONSIVE  -------- */
+@media(max-width:768px){
+  .logo{font-size:2rem}
+  .card{padding:25px}
+  .question-text{font-size:1.1rem}
+  .final-score-card h2{font-size:2rem}
 }
