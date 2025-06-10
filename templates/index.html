@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Battle 🎮</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">🎯 Quiz Battle</h1>
+    <div id="quiz-card">
+      <p id="question">Loading...</p>
+      <ul id="options"></ul>
+      <p id="result"></p>
+      <button onclick="loadQuestion()" class="next-btn">Next Question</button>
+    </div>
+    <div id="timer">🕒 10s</div>
+  </div>
+
+  <audio id="correct-sound" src="/static/correct.mp3"></audio>
+  <audio id="wrong-sound" src="/static/wrong.mp3"></audio>
+
+  <script>
+    let correctAnswer = "";
+    let timerInterval;
+    let timeLeft = 10;
+
+    async function loadQuestion() {
+      clearInterval(timerInterval);
+      timeLeft = 10;
+      document.getElementById("timer").innerText = "🕒 10s";
+      startTimer();
+
+      const res = await fetch("https://opentdb.com/api.php?amount=1&type=multiple");
+      const data = await res.json();
+      const q = data.results[0];
+      correctAnswer = q.correct_answer;
+
+      const allOptions = [...q.incorrect_answers, q.correct_answer];
+      shuffle(allOptions);
+
+      document.getElementById("question").innerHTML = decode(q.question);
+      const optionsList = document.getElementById("options");
+      optionsList.innerHTML = "";
+
+      allOptions.forEach(opt => {
+        const li = document.createElement("li");
+        li.innerHTML = decode(opt);
+        li.classList.add("option");
+        li.onclick = () => checkAnswer(opt);
+        optionsList.appendChild(li);
+      });
+
+      document.getElementById("result").innerText = "";
+    }
+
+    function checkAnswer(selected) {
+      clearInterval(timerInterval);
+      if (selected === correctAnswer) {
+        document.getElementById("result").innerText = "✅ Correct!";
+        document.getElementById("correct-sound").play();
+      } else {
+        document.getElementById("result").innerText = "❌ Wrong!";
+        document.getElementById("wrong-sound").play();
+      }
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function decode(str) {
+      const txt = document.createElement("textarea");
+      txt.innerHTML = str;
+      return txt.value;
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = `🕒 ${timeLeft}s`;
+        if (timeLeft === 0) {
+          clearInterval(timerInterval);
+          document.getElementById("result").innerText = "⏰ Time's up!";
+          document.getElementById("wrong-sound").play();
+        }
+      }, 1000);
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
