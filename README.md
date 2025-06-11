@@ -10,7 +10,7 @@ Welcome to **Quiz Battle**, a one-of-a-kind web quiz game that blends creativity
 🔁 CI/CD Pipeline: On every `git push`, GitHub Actions build the Docker image, tag it as `latest`, and push to Docker Hub.  
 
 ## 🚀 Run It Your Way  
-🐳 Docker (Recommended – No Setup!):
+🐳 Docker (Recommended – No Setup!)
  docker pull yasvanth123/quiz-battle:latest  
  docker run -p 5050:5050 yasvanth123/quiz-battle:latest  
 
