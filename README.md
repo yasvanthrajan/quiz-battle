@@ -44,6 +44,6 @@ cd quiz-battle
 pip install flask
 python app.py
 Then visit 👉 http://localhost:5050
-🐳 Docker (Recommended – No Setup!)
+### 🐳 Docker (Recommended – No Setup!)
 docker pull yasvanth123/quiz-battle:latest
 docker run -p 5050:5050 yasvanth123/quiz-battle:latest
